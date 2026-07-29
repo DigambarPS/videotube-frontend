@@ -1,4 +1,5 @@
-import axios from "axios";
+import { loginUserApi, registerUserApi, logoutUserApi } from "../api/auth.js"
+import { useQuery } from "@tanstack/react-query";
 
 const loginUser = async () => {
     

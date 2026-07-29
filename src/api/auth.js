@@ -1,11 +1,11 @@
 import axiosInstance from "./axiosInstance";
 
-const loginUser = (payload) => axiosInstance.post('/users/login', payload);
-const registerUser = (payload) => axiosInstance.post('/users/register', payload);
-const logoutUser = (payload) => axiosInstance.post('/users/logout', payload);
+const loginUserApi = (payload) => axiosInstance.post('/users/login', payload);
+const registerUserApi = (payload) => axiosInstance.post('/users/register', payload);
+const logoutUserApi = (payload) => axiosInstance.post('/users/logout', payload);
 
 export {
-    loginUser,
-    registerUser,
-    logoutUser
+    loginUserApi,
+    registerUserApi,
+    logoutUserApi
 }

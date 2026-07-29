@@ -1,33 +1,26 @@
 import { useState } from "react";
-import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
+import { loginUserApi } from "../api/auth.js";
+import { useNavigate } from "react-router-dom";
+import ErrorUI from "../components/ui/ErrorUI.jsx";
 
 export default function Login() {
   const [emailOrUser, setEmailOrUser] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const loginMutation = useMutation({
+    mutationFn: (payload) => loginUserApi(payload),
+    onSuccess: (data) => {
+      navigate("/");
+    },
+    onError: (error) => {
+    },
+  });
+
+  const handleLogin = (e) => {
     e.preventDefault();
-    setError("");
-
-    try {
-      const response = await axios.post("/api/users/login", {
-        username: emailOrUser,
-        email: emailOrUser,
-        password: password,
-      });
-      const { accessToken, user } = response.data.data;
-
-      // Store token and user info
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("user", JSON.stringify(user));
-
-      // alert("Login successful!");
-      // Redirect or update app state here
-      navigate("/")
-    } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
-    }
+    loginMutation.mutate({ email:emailOrUser, username:emailOrUser, password });
   };
 
   return (
@@ -36,6 +29,14 @@ export default function Login() {
         <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 dark:text-gray-200 mb-6">
           Login
         </h2>
+
+        {loginMutation.isError && (
+          <ErrorUI
+            message={loginMutation.error.message || "Login failed"}
+            onClose={() => loginMutation.reset()} // reset clears error state
+          />
+        )}
+
         <form onSubmit={handleLogin} className="space-y-4">
           {/* Username/Email */}
           <input
@@ -59,10 +60,6 @@ export default function Login() {
                        dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
           />
 
-          {/* Error message */}
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-
-          {/* Login Button */}
           <button
             type="submit"
             className="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg 
