@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Avatar = ({ src, alt = "User Avatar", size = "w-12 h-12" }) => {
+const Avatar = ({ src="https://res.cloudinary.com/dajxuyxdx/image/upload/v1783798683/fyccme4ouyjwbujwobkr.png", alt = "User Avatar", size = "w-12 h-12" }) => {
   return (
     <img
       src={src}

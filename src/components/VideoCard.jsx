@@ -13,14 +13,13 @@ const VideoCard = ({
     <div className="flex flex-col gap-2 p-2 
                     w-full sm:w-1/2 md:w-1/3 lg:w-1/4 
                     bg-gray-950 hover:bg-gray-800 text-white rounded-lg">
-      {/* Thumbnail */}
+      
       <img
         className="rounded-lg w-full h-auto object-cover"
         src={thumbnailSrc}
         alt="thumbnail"
       />
 
-      {/* Info Section */}
       <div className="flex flex-row gap-2 mt-2">
         <Avatar size="w-10 h-10" src={avatarSrc} />
         <div className="flex flex-col gap-1">
@@ -35,6 +34,5 @@ const VideoCard = ({
     </div>
   );
 };
-
 
 export default VideoCard

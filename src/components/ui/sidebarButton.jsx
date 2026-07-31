@@ -1,14 +1,15 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-const sidebarButton = ({ label, icon}) => {
+const SidebarButton = ({ label, icon: Icon, toPage="/" }) => {
   return (
-    <div className='flex flex-col'>
-        <div className='flex flex-col'>
-            {icon}
-            <div>{label}</div>
-        </div>
-    </div>
+    <Link to={toPage} className="w-full">
+      <div className="flex items-center gap-2 w-full">
+        <Icon className="text-xl" />
+        <span>{label}</span>
+      </div>
+    </Link>
   )
 }
 
-export default sidebarButton
+export default SidebarButton

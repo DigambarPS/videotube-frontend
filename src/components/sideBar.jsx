@@ -1,15 +1,34 @@
-import React from 'react'
-import SidebarButton from './ui/sidebarButton'
-import { FaHome } from 'react-icons/fa'
+import React, { useState } from 'react'
+import SidebarButton from './ui/SidebarButton'
+import { FaHome, FaBars } from 'react-icons/fa'
 
 const SideBar = () => {
+  const [isOpen, setIsOpen] = useState(false)
+
   return (
-    <div className="flex flex-row md:flex-col 
-                    w-full md:w-48 lg:w-64 
-                    bg-gray-950 text-white p-2 md:p-4 gap-2">
-      <SidebarButton label="Home" icon={FaHome} />
-      <SidebarButton label="Trending" icon={FaHome} />
-      <SidebarButton label="Subscriptions" icon={FaHome} />
+    <div className="flex">
+      {/* Mobile toggle button */}
+      <button 
+        className="md:hidden p-2 text-white bg-gray-900"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <FaBars />
+      </button>
+
+      {/* Sidebar */}
+      <div className={`
+        fixed md:static top-0 left-0 h-screen md:h-auto 
+        bg-gray-950 text-white p-2 gap-2 
+        transition-transform duration-300 
+        ${isOpen ? "translate-x-0" : "-translate-x-full"} 
+        md:translate-x-0 
+        w-48 lg:w-64
+      `}>
+        <SidebarButton label="Home" icon={FaHome} toPage="/Home"/>
+        <hr className="border-gray-700"/>
+        <SidebarButton label="Subscriptions" icon={FaHome} toPage="/Subscriptions"/>
+        <hr className="border-gray-700"/>
+      </div>
     </div>
   )
 }
