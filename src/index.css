@@ -1,1 +1,24 @@
 @import "tailwindcss";
+
+/* Base theme variables */
+@theme {
+  --color-primary: #000;   /* pink-500 */
+  --color-secondary: #000; /* pink-300 */
+  --color-foreground: #fff;
+}
+
+/* Dark mode overrides */
+.dark {
+  --color-primary: #be185d;   /* pink-700 */
+  --color-secondary: #9d174d; /* pink-800 */
+}
+
+/* Green theme */
+[data-theme="green"] {
+  --color-primary: #10b981;   /* emerald-500 */
+  --color-secondary: #6ee7b7; /* emerald-300 */
+}
+[data-theme="green"].dark {
+  --color-primary: #047857;   /* emerald-700 */
+  --color-secondary: #065f46; /* emerald-800 */
+}
