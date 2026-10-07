@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance";
+import {getRequest} from "./axiosInstance";
 
 const changeUserPassword = (payload) => axiosInstance.post('/users/change-password', payload);
 const updateUserDetails = (payload) => axiosInstance.post('/users/update-details', payload);
@@ -6,9 +6,12 @@ const updateAvatar = (payload) => axiosInstance.post('/users/update-avatar', pay
 const updateCoverImage = (payload) => axiosInstance.post('/users/update-coverImage', payload);
 const renewAccessToken = (payload) => axiosInstance.post('/users/renew-access-token', payload);
 
-const getCurrentUser = (payload) => axiosInstance.get('/users/get-current-user', payload);
-const getHistory = (payload) => axiosInstance.get('/users/get-history', payload);
-const getUserChannelProfile = (payload) => axiosInstance.get('/users/c/${id}', payload);
+const getCurrentUser = async () => {
+    return getRequest('/users/get-current-user');
+}
+const getHistory = async (payload) => getRequest('/users/get-history', payload);
+
+const getUserChannelProfile = async (channelId) => getRequest(`/users/c/${channelId}`);
 
 export {
     changeUserPassword,
