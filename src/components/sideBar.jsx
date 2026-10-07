@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import SidebarButton from './ui/SidebarButton'
 import { FaHome, FaBars } from 'react-icons/fa'
+import { MdSubscriptions } from "react-icons/md";
+import { useAuth } from '../context/authContext';
 
 const SideBar = () => {
   const [isOpen, setIsOpen] = useState(false)
-
+  const {user} = useAuth();
   return (
     <div className="flex">
       {/* Mobile toggle button */}
@@ -26,7 +28,7 @@ const SideBar = () => {
       `}>
         <SidebarButton label="Home" icon={FaHome} toPage="/Home"/>
         <hr className="border-gray-700"/>
-        <SidebarButton label="Subscriptions" icon={FaHome} toPage="/Subscriptions"/>
+        <SidebarButton label="Subscriptions" icon={MdSubscriptions} toPage={`/Subscriptions/${user?._id}`}/>
         <hr className="border-gray-700"/>
       </div>
     </div>
