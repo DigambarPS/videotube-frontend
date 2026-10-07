@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { loginUserApi } from "../api/auth.js";
+import { useState, useEffect } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { loginUserApi } from "../api/authApi.js";
 import { useNavigate } from "react-router-dom";
 import ErrorUI from "../components/ui/ErrorUI.jsx";
 
@@ -8,11 +8,13 @@ export default function Login() {
   const [emailOrUser, setEmailOrUser] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const loginMutation = useMutation({
     mutationFn: (payload) => loginUserApi(payload),
-    onSuccess: (data) => {
-      navigate("/");
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+      navigate("/Home");
     },
     onError: (error) => {
     },

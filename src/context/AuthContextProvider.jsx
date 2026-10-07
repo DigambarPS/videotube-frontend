@@ -1,18 +1,15 @@
 import { useState } from "react";
-import AuthContext from "./authContext";
+import { AuthContext } from "./authContext.js";
+import { useGetCurrentUser } from "../hooks/useUser.js";
 
 const AuthContextProvider = ({ children }) => {
-  const [theme, setTheme] = useState("light");
+  const {data:user, isLoading, isError} = useGetCurrentUser();
 
   return (
-    <AuthContext.Provider value={{ theme, setTheme }}>
+    <AuthContext.Provider value={{ user, isLoading, isError }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export default function showAvatarOptions(){
-    alert('hi')
-}
-
-export {AuthContextProvider, showAvatarOptions};
+export default AuthContextProvider;
