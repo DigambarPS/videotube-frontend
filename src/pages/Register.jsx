@@ -1,37 +1,14 @@
-import React, { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import React from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useForm } from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "../schemas/authSchemas";
+import { registerUserApi } from "../api/authApi";
 
 const Register = () => {
   const navigate = useNavigate();
-
-  const [email, setEmail] = useState("");
-  const [userName, setUserName] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [password, setPassword] = useState("");
-  const [avatar, setAvatar] = useState(null);
-  const [coverImage, setCoverImage] = useState(null);
-
-  const registerUser = async (data) => {
-    const formData = new FormData();
-    formData.append("username", data.userName);
-    formData.append("email", data.email);
-    formData.append("fullName", data.fullName);
-    formData.append("password", data.password);
-
-    if (data.avatar) formData.append("avatar", data.avatar);
-    if (data.coverImage) formData.append("coverImage", data.coverImage);
-
-    const response = await axios.post("/api/v1/users/register", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-
-    return response.data;
-  };
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -41,16 +18,34 @@ const Register = () => {
     resolver: zodResolver(registerSchema),
   });
 
+  const registerUser = async (data) => {
+    const formData = new FormData();
+    formData.append("username", data.userName);
+    formData.append("email", data.email);
+    formData.append("fullName", data.fullName);
+    formData.append("password", data.password);
+    
+    // File inputs return a FileList, grab the first file
+    if (data.avatar?.[0]) {
+      formData.append("avatar", data.avatar[0]);
+    }
+    if (data.coverImage?.[0]) {
+      formData.append("coverImage", data.coverImage[0]);
+    }
+    const response = await registerUserApi(formData);
+    return response.data;
+  };
+
   const { mutate, isPending, error } = useMutation({
     mutationFn: registerUser,
     onSuccess: () => {
-      navigate("/home");
+      queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+      navigate("/login");
     },
   });
 
-  const handleRegister = (e) => {
-    e.preventDefault();
-    mutate({ userName, email, fullName, password, avatar, coverImage });
+  const onSubmit = (data) => {
+    mutate(data);
   };
 
   return (
@@ -59,63 +54,74 @@ const Register = () => {
         <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 dark:text-gray-200 mb-6">
           Register
         </h2>
-        <form onSubmit={handleRegister} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          
           {/* Email */}
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
-            required
-          />
+          <div>
+            <input
+              type="email"
+              placeholder="Email"
+              {...register("email")}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
+            />
+            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+          </div>
 
           {/* Username */}
-          <input
-            type="text"
-            placeholder="Username"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
-            required
-          />
+          <div>
+            <input
+              type="text"
+              placeholder="Username"
+              {...register("userName")}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
+            />
+            {errors.userName && <p className="text-red-500 text-xs mt-1">{errors.userName.message}</p>}
+          </div>
 
-          {/* Fullname */}
-          <input
-            type="text"
-            placeholder="Full Name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
-            required
-          />
+          {/* Full Name */}
+          <div>
+            <input
+              type="text"
+              placeholder="Full Name"
+              {...register("fullName")}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
+            />
+            {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName.message}</p>}
+          </div>
 
           {/* Avatar Image */}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setAvatar(e.target.files[0])}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
-            required
-          />
+          <div>
+            <label className="block text-xs text-gray-500 mb-1">Avatar Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              {...register("avatar")}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
+            />
+            {errors.avatar && <p className="text-red-500 text-xs mt-1">{errors.avatar.message}</p>}
+          </div>
 
           {/* Cover Image */}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setCoverImage(e.target.files[0])}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
-          />
+          <div>
+            <label className="block text-xs text-gray-500 mb-1">Cover Image (Optional)</label>
+            <input
+              type="file"
+              accept="image/*"
+              {...register("coverImage")}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
+            />
+          </div>
 
           {/* Password */}
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
-            required
-          />
+          <div>
+            <input
+              type="password"
+              placeholder="Password"
+              {...register("password")}
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
+            />
+            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
+          </div>
 
           {/* Error Message Display */}
           {error && (
