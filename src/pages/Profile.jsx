@@ -3,6 +3,7 @@ import Input from '../components/ui/Input'
 import Button from '../components/ui/Button'
 import Avatar from '../components/ui/Avatar'
 import { useAuth } from '../context/authContext'
+import { useUpdateProfileDetails } from '../hooks/useUser'
 
 const Profile = () => {
   const {user} = useAuth();
@@ -10,7 +11,7 @@ const Profile = () => {
   const [email, setEmail] = useState('')
   const [avatarFile, setAvatarFile] = useState(null)
   const [coverImageFile, setCoverImageFile] = useState(null)
-  
+  const {mutate, isPending} = useUpdateProfileDetails();
 
   function updateDetails(e) {
     e.preventDefault()

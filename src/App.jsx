@@ -48,13 +48,6 @@ const router = createBrowserRouter([
           { path: "/profile", element: <Profile /> },
           { path: "/settings", element: <Settings /> },
           { path: "/Channel/:channelId", element: <Channel/>},
-          {
-            path: "/logout",
-            loader: async () => {
-              const res = await logoutUserApi();
-              if (res.data.statusCode == 200) return redirect("/");
-            },
-          },
         ],
       },
     ],

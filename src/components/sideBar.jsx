@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SidebarButton from './ui/SidebarButton';
+import SidebarButton from './ui/sidebarButton.jsx';
 import { FaHome, FaBars, FaTimes } from 'react-icons/fa';
 import { MdSubscriptions } from "react-icons/md";
 import { useAuth } from '../context/authContext';

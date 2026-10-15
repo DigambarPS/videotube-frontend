@@ -13,9 +13,7 @@ const Home = () => {
     <div className="flex flex-col md:flex-row w-full min-h-screen bg-gray-900 text-white">
       
       {/* Sidebar */}
-      <div className="md:w-1/5 lg:w-1/8 bg-gray-950 p-4">
-        <SideBar />
-      </div>
+      <SideBar />
 
       {/* Video Grid */}
       <div className="flex-1 p-4">
