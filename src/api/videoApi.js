@@ -1,7 +1,7 @@
 import {getRequest} from "./axiosInstance";
 
-const getAllVideos = async (page=1, limit=15, userId=null, sort=null) => {
-    return getRequest("/videos/",{page, limit, userId, sort})
+const getAllVideos = async (page=1, limit=15, userId=null, sort=null, query) => {
+    return getRequest("/videos/",{page, limit, userId, sort, query})
 }
 
 const getVideoById = async (videoId) => {

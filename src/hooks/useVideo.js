@@ -3,10 +3,10 @@ import { getAllVideos, getVideoById } from "../api/videoApi";
 import { useQuery } from "@tanstack/react-query";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-export const useVideos = () => {
+export const useVideos = (page,limit,userId,sort,query) => {
     return useInfiniteQuery({
-        queryKey: ["videos"],
-        queryFn: getAllVideos,
+        queryKey: ["videos", query],
+        queryFn: () => getAllVideos(page,limit,userId,sort,query),
         initialPageParam:1,
         getNextPageParam: (lastPage) => {
             return lastPage.hasNextPage ? lastPage.nextPage : undefined
