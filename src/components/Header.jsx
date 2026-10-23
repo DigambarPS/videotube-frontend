@@ -35,7 +35,7 @@ const Header = () => {
         <div className="flex flex-row justify-between items-center mx-auto">
             <div>
                 <Link to="/Home" className="flex items-center">
-                    <img src="https://flowbite.com/docs/images/logo.svg" className="mr-3 h-6 sm:h-9" alt="VidRepublic Logo" />
+                    <img src="https://res.cloudinary.com/dajxuyxdx/image/upload/v1792783570/vidRepublic-logo_kzb5zp.jpg" className="mr-3 h-6 sm:h-9" alt="VidRepublic Logo" />
                     <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">VidRepublic</span>
                 </Link>
             </div>
