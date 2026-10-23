@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import {lazy, Suspense } from "react";
 import "./App.css";
 import Header from "./components/Header.jsx";
 import ThemeContextProvider from "./context/ThemeContextProvider.jsx";
@@ -7,24 +7,27 @@ import {
   createBrowserRouter,
   redirect,
   RouterProvider,
+  Outlet
 } from "react-router-dom";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Home from "./pages/Home.jsx";
-import Profile from "./pages/Profile.jsx";
-import VideoPlayerPage from "./pages/VideoPlayerPage.jsx";
-import Settings from "./pages/Settings.jsx";
-import Channel from "./pages/Channel.jsx";
 import { logoutUserApi } from "./api/authApi.js";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import PublicOnlyRoute from "./components/PublicOnlyRoute.jsx";
+const VideoPlayerPage = lazy(() => import("./pages/VideoPlayerPage.jsx"));
+const Profile = lazy(() => import("./pages/Profile.jsx"));
+const Channel = lazy(() => import("./pages/Channel.jsx"));
+const Settings = lazy(() => import("./pages/Settings.jsx"));
 
 function RootLayout() {
   return (
     <>
       <Header />
+      <Suspense fallback={<p className="text-center py-10">Loading...</p>}>
       <Outlet />
+      </Suspense>
     </>
   );
 }
