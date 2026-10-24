@@ -26,9 +26,9 @@ const AvatarMenu = ({ ref = "" }) => {
           <Link to="/Profile">
             <Button val="Profile" extra_class="w-full p-2 rounded-lg"></Button>
           </Link>
-          <button onClick={() => logout()} disabled={isPending}>
+          <Button func={() => logout()} disabled={isPending} extra_class="w-full p-2 rounded-lg">
             {isPending ? "Logging out..." : "Log out"}
-          </button>
+          </Button>
         </ul>
       </div>
     </div>
