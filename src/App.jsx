@@ -16,10 +16,12 @@ import { logoutUserApi } from "./api/authApi.js";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import PublicOnlyRoute from "./components/PublicOnlyRoute.jsx";
+import SideBar from "./components/sideBar.jsx";
 const VideoPlayerPage = lazy(() => import("./pages/VideoPlayerPage.jsx"));
 const Profile = lazy(() => import("./pages/Profile.jsx"));
 const Channel = lazy(() => import("./pages/Channel.jsx"));
 const Settings = lazy(() => import("./pages/Settings.jsx"));
+const Subscriptions = lazy(() => import("./pages/Subscriptions.jsx"));
 
 function RootLayout() {
   return (
@@ -29,6 +31,19 @@ function RootLayout() {
       <Outlet />
       </Suspense>
     </>
+  );
+}
+
+function HomeLayout() {
+  return (
+    <div className="flex">
+      <SideBar />
+      <main className="flex-1">
+        <Suspense fallback={<p className="text-center py-10">Loading...</p>}>
+          <Outlet />
+        </Suspense>
+      </main>
+    </div>
   );
 }
 
@@ -46,11 +61,17 @@ const router = createBrowserRouter([
       {
         element: <ProtectedRoute />,
         children: [
-          { path: "/Home", element: <Home /> },
           { path: "/play/:videoId", element: <VideoPlayerPage /> },
           { path: "/profile", element: <Profile /> },
           { path: "/settings", element: <Settings /> },
           { path: "/Channel/:channelId", element: <Channel/>},
+          {
+            element:<HomeLayout/>,
+            children:[
+              { path: "/Home", element: <Home /> },
+              { path: "/Subscriptions/:userid", element: <Subscriptions/>},
+            ]
+          }
         ],
       },
     ],

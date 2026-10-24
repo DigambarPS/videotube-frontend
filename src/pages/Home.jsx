@@ -20,8 +20,9 @@ const Home = () => {
 
   return (
     <div className="flex flex-col md:flex-row w-full min-h-screen bg-gray-900 text-white">
-      {/* Sidebar */}
-      <SideBar />
+
+
+      
       {/* Video Grid */}
       <div className="flex-1 p-4">
       {isLoading ? (
