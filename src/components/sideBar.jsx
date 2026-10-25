@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import SidebarButton from './ui/sidebarButton.jsx';
-import { FaHome, FaBars, FaTimes } from 'react-icons/fa';
+import { FaHome, FaBars, FaTimes, FaUser, FaClipboardList, FaTimesCircle, FaClock, FaList } from 'react-icons/fa';
 import { MdSubscriptions } from "react-icons/md";
-import { useAuth } from '../context/authContext';
+import { useAuth } from '../context/authContext.js';
 
 const SideBar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -43,8 +43,12 @@ const SideBar = () => {
         <SidebarButton 
           label="Subscriptions" 
           icon={MdSubscriptions} 
-          toPage={user?._id ? `/Subscriptions/${user._id}` : "/login"} 
+          toPage={user?._id ? `/Home` : "/login"} 
         />
+
+        <SidebarButton label="Your Channel" icon={FaUser} toPage={`/Channel/${user._id}`} />
+        <SidebarButton label="Playlists" icon={FaList} toPage={`/Home`} />
+        <SidebarButton label="Watch History" icon={FaClock} toPage={`/Home`} />
       </div>
     </>
   );

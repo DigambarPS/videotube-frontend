@@ -16,9 +16,9 @@ const AvatarMenu = ({ ref = "" }) => {
     >
       <div className="flex flex-col w-full">
         <div className="flex gap-2">
-          <Avatar src={user.avatar} />
+          <Avatar src={user?.avatar} />
           <div className="flex flex-col gap-1">
-            <div>{user.fullName}</div>
+            <div>{user?.fullName}</div>
             <Link to={`/Channel/${user?._id}`}>View Your Channel</Link>
           </div>
         </div>
