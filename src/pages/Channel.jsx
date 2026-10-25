@@ -9,11 +9,12 @@ import { formatTimeSinceUpload, formatViews } from "../utils/formatters";
 import { useUserChannelProfile } from "../hooks/useUser";
 import { useToggleSubscribe } from "../hooks/useSubscription";
 import { useParams } from "react-router-dom";
+import Button from "../components/ui/Button.jsx";
 
 const Channel = () => {
   const [activeTab, setActiveTab] = useState("Home");
   const { user } = useAuth();
-  const {channelId} = useParams(); 
+  const { channelId } = useParams();
 
   const tabs = ["Home", "Videos", "About"];
 
@@ -21,7 +22,7 @@ const Channel = () => {
   const { data, isLoading, isError, fetchNextPage, hasNextPage } =
     useChannelVideos(1, 15, user?._id);
   const Videos = data?.pages.flatMap((page) => page.docs) || [];
-  
+
   //for channel data
   const {
     data: channelData,
@@ -32,7 +33,9 @@ const Channel = () => {
   const isSubscribed = channelData?.isSubscribed ?? false;
 
   // Mutation for toggling subscription
-  const { mutate: toggleSubscribe, isPending } = useToggleSubscribe(channelData?._id);
+  const { mutate: toggleSubscribe, isPending } = useToggleSubscribe(
+    channelData?._id,
+  );
 
   const handleSubscribeClick = () => {
     toggleSubscribe();
@@ -41,8 +44,12 @@ const Channel = () => {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
       {/* 1. Channel Banner */}
-      <div className="w-full h-32 md:h-56 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/10"></div>
+      <div className="w-full h-32 md:h-56 relative overflow-hidden">
+        {channelData?.coverImage ? (
+          <img src={channelData?.coverImage} alt="cover banner" />
+        ) : (
+          <div className="absolute inset-0 bg-black/10 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600"></div>
+        )}
       </div>
 
       {/* Main Container */}
@@ -76,23 +83,25 @@ const Channel = () => {
 
           {/* Subscribe Action Button */}
           <div className="flex items-center space-x-2 self-stretch sm:self-auto">
-            <button
-              onClick={() => handleSubscribeClick()}
-              className={`flex-1 sm:flex-none px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 flex items-center justify-center space-x-2 ${
-                isSubscribed
-                  ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
-                  : "bg-black text-white hover:bg-gray-800"
-              }`}
-            >
-              {isSubscribed ? (
-                <>
-                  <FiBell className="w-4 h-4" />
-                  <span>Subscribed</span>
-                </>
-              ) : (
-                <span>Subscribe</span>
-              )}
-            </button>
+            {channelData?._id !== user?._id && (
+              <Button
+                func={() => handleSubscribeClick()}
+                extra_class={`flex-1 sm:flex-none px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 flex items-center justify-center space-x-2 ${
+                  isSubscribed
+                    ? "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                    : "bg-black text-white hover:bg-gray-800"
+                }`}
+              >
+                {isSubscribed ? (
+                  <>
+                    <FiBell className="w-4 h-4" />
+                    <span>Subscribed</span>
+                  </>
+                ) : (
+                  <span>Subscribe</span>
+                )}
+              </Button>
+            )}
           </div>
         </div>
 
@@ -120,20 +129,27 @@ const Channel = () => {
               <h2 className="text-lg font-bold text-gray-900 mb-4">
                 Latest Uploads
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {Videos.map((video) => (
-                  <VideoCard
-                    avatarSrc={video.owner[0]?.avatar}
-                    thumbnailSrc={video.thumbnail}
-                    videoTitle={video.title}
-                    channelName={video.owner[0]?.fullName}
-                    views={formatViews(video.views)}
-                    timeFromPosting={formatTimeSinceUpload(video.createdAt)}
-                    videoId={video._id}
-                    key={video._id}
-                  />
-                ))}
-              </div>
+              {Videos.length !== 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {Videos.map((video) => (
+                    <VideoCard
+                      avatarSrc={video.owner[0]?.avatar}
+                      thumbnailSrc={video.thumbnail}
+                      videoTitle={video.title}
+                      channelName={video.owner[0]?.fullName}
+                      views={formatViews(video.views)}
+                      timeFromPosting={formatTimeSinceUpload(video.createdAt)}
+                      videoId={video._id}
+                      key={video._id}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="py-12 text-center text-gray-500 text-base font-medium">
+                  {" "}
+                  No Videos Found{" "}
+                </div>
+              )}
             </div>
           ) : (
             <div className="py-12 text-center text-gray-500">
