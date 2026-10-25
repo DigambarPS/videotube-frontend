@@ -17,6 +17,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import PublicOnlyRoute from "./components/PublicOnlyRoute.jsx";
 import SideBar from "./components/sideBar.jsx";
+import LandingPage from "./pages/LandingPage.jsx";
 const VideoPlayerPage = lazy(() => import("./pages/VideoPlayerPage.jsx"));
 const Profile = lazy(() => import("./pages/Profile.jsx"));
 const Channel = lazy(() => import("./pages/Channel.jsx"));
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
     children: [{
       element:<PublicOnlyRoute/>,
       children:[
+      { index: true, element: <LandingPage/> },
       { path: "/login", element: <Login /> },
       { path: "/register", element: <Register />}
     ]
