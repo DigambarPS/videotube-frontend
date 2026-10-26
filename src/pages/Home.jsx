@@ -40,7 +40,7 @@ const Home = () => {
             {videos?.map((video) => {
               return (
                 <VideoCard
-                  avatarSrc={video.owner[0]?.avatar}
+                  avatarSrc={video?.owner[0].avatar}
                   thumbnailSrc={video.thumbnail}
                   videoTitle={video.title}
                   channelName={video.owner[0]?.fullName}

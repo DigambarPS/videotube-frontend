@@ -21,7 +21,7 @@ const VideoPlayerPage = () => {
             </div>
             <CommentLayout videoId={videoId}/>
         </div>
-        <RecommendationList userId={user?._id}/>
+        {/* <RecommendationList userId={user?._id}/> */}
     </div>
   )
 }
