@@ -16,7 +16,7 @@ const VideoPlayerPage = () => {
     <div className='flex flex-wrap lg:flex-nowrap w-full p-2 bg-primary text-foreground'>
         <div className='flex flex-wrap lg:w-10/12 sm:w-full pr-1'>
             <div className=''>
-            {isLoading && data?.src && <VideoPlayer src={data.src}/>}
+            {isLoading && data?.videoFile && <VideoPlayer src={data.videoFile}/>}
             <VideoDescription videoData={data}/>
             </div>
             <CommentLayout videoId={videoId}/>
