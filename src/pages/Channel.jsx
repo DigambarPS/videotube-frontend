@@ -45,8 +45,8 @@ const Channel = () => {
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
       {/* 1. Channel Banner */}
       <div className="w-full h-32 md:h-56 relative overflow-hidden">
-        {channelData?.coverImage ? (
-          <img src={channelData?.coverImage} alt="cover banner" />
+        {!isLoading && channelData?.coverImage ? (
+          <img src={channelData.coverImage} alt="cover banner" className="w-full h-full object-cover"/>
         ) : (
           <div className="absolute inset-0 bg-black/10 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600"></div>
         )}
