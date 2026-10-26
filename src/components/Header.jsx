@@ -8,6 +8,7 @@ import { FaRegBell, FaUpload } from 'react-icons/fa'
 import Button from './ui/Button'
 import { useOnClickOutside } from '../hooks/useOnClickOutside';
 import Modal from './ui/Modal'
+import CreateVideoModal from './CreateVideoModal.jsx';
 
 const Header = () => {
     const { user } = useAuth();
@@ -18,10 +19,6 @@ const Header = () => {
 
     const showAvatarOptions = () => {
         setMenuOpen(!menuOpen)
-    }
-
-    const showCreateModal = () => {
-        console.log('video upload modal')
     }
 
     const showNotification = () => {
@@ -59,7 +56,7 @@ const Header = () => {
                 <div className="flex items-center lg:order-2 gap-8">
                     <div className='text-white text-xl'>
                     {/* {user && <Button val="Create" func={showCreateModal}/>} */}
-                    {user && <Button func={showCreateModal} extra_class='p-3 rounded-2xl'><FaUpload/></Button>}
+                    {user && <Button func={() => {setIsClose(false)}} extra_class='p-3 rounded-2xl'><FaUpload/></Button>}
                     </div>
                     {/* <div className='text-white text-xl'>
                     {user && <Button func={showNotification} extra_class='p-3 rounded-2xl'><FaRegBell/></Button>}
@@ -74,7 +71,7 @@ const Header = () => {
         </div>
         {user && menuOpen && (<AvatarMenu ref={menuRef}/>)}
     </nav>
-    <Modal isClose={isClose} setIsClose={setIsClose} children={<div>Hello</div>} heading='Hello'/>
+    <CreateVideoModal isClose={isClose} setIsClose={setIsClose}/>
 </header>
     </>
   )

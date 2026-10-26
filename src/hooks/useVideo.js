@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { getAllVideos, getVideoById } from "../api/videoApi";
-import { useQuery } from "@tanstack/react-query";
+import { getAllVideos, getVideoById, postVideo } from "../api/videoApi";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 export const useVideos = (page,limit,userId,sort,query) => {
     return useInfiniteQuery({
@@ -32,3 +33,18 @@ export const useChannelVideos = (page,limit,userId) => {
         }
     })
 }
+
+export const useUploadVideo = () => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: (formData) => postVideo(formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["videos"] });
+      navigate("/Home");
+    },
+  });
+
+  return { mutate, isPending, error };
+};
