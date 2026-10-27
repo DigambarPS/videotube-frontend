@@ -41,7 +41,7 @@ const Home = () => {
               return (
                 <VideoCard
                   avatarSrc={video?.owner[0].avatar}
-                  thumbnailSrc={video.thumbnail}
+                  thumbnailSrc={video?.thumbnail}
                   videoTitle={video.title}
                   channelName={video.owner[0]?.fullName}
                   views={formatViews(video.views)}
