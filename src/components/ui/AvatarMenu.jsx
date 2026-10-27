@@ -12,7 +12,7 @@ const AvatarMenu = ({ ref = "" }) => {
   return (
     <div
       ref={ref}
-      className="fixed h-auto p-2 w-60 right-5 rounded-lg bg-opacity-50 flex items-center justify-center bg-primary dark:bg-primary-dark text-black dark:text-white"
+      className="fixed h-auto p-2 w-60 right-5 rounded-lg bg-opacity-50 flex items-center justify-center bg-primary dark:bg-primary-dark text-black dark:text-white z-50"
     >
       <div className="flex flex-col w-full">
         <div className="flex gap-2">
