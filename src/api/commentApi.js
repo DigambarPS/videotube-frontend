@@ -5,8 +5,8 @@ const getVideoComments = async (videoId) => {
     return data.data;
 }
 
-const postVideoComment = async (videoId,comment) => {
-    const {data} = await axiosInstance.post(`/comment/${videoId}`, {content:comment});
+const postVideoComment = async (videoId, comment) => {
+    const { data } = await axiosInstance.post(`/comment/${videoId}`, { content: comment });
     return data.data;
 }
 

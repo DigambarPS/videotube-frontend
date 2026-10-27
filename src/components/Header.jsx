@@ -4,7 +4,7 @@ import Avatar from './ui/Avatar'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/authContext'
 import AvatarMenu from './ui/AvatarMenu'
-import { FaRegBell, FaUpload } from 'react-icons/fa'
+import { FaRegBell, FaUpload, FaSearch, FaTimes } from 'react-icons/fa'
 import Button from './ui/Button'
 import { useOnClickOutside } from '../hooks/useOnClickOutside';
 import Modal from './ui/Modal'
@@ -14,6 +14,7 @@ const Header = () => {
     const { user } = useAuth();
     const [menuOpen, setMenuOpen] = useState(false);
     const [isClose, setIsClose] = useState(true);
+    const [showMobileSearch, setShowMobileSearch] = useState(false); // State for toggling mobile search
     const menuRef = useRef(null);
     useOnClickOutside(menuRef, () => setMenuOpen(false));
 
@@ -21,60 +22,88 @@ const Header = () => {
         setMenuOpen(!menuOpen)
     }
 
-    const showNotification = () => {
-        
-    }
-
   return(
     <>
-    <header>
-    <nav className="bg-primary text-primary border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-primary-dark">
-        <div className="flex flex-row justify-between items-center mx-auto">
-            <div>
-                <Link to="/Home" className="flex items-center">
-                    <img src="https://res.cloudinary.com/dajxuyxdx/image/upload/v1792783570/vidRepublic-logo_kzb5zp.jpg" className="mr-3 h-6 sm:h-9" alt="VidRepublic Logo" />
-                    <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">VidRepublic</span>
-                </Link>
+    <header className="relative">
+      <nav className="bg-primary text-primary border-gray-200 px-3 lg:px-6 py-2.5 dark:bg-primary-dark">
+        {/* Main top row */}
+        <div className="flex justify-between items-center mx-auto gap-3">
+          
+          {/* Logo (Hidden on mobile if search is open, or kept visible) */}
+          {!showMobileSearch && (
+            <div className="flex items-center">
+              <Link to="/Home" className="flex items-center shrink-0">
+                <img src="https://res.cloudinary.com/dajxuyxdx/image/upload/v1792783570/vidRepublic-logo_kzb5zp.jpg" className="mr-2 h-6 sm:h-9" alt="VidRepublic Logo" />
+                <span className="self-center text-lg sm:text-xl font-semibold whitespace-nowrap dark:text-white">VidRepublic</span>
+              </Link>
             </div>
-            {user && (
-            <div>
+          )}
+
+          {/* Desktop Search Bar (Always visible on md and above) */}
+          {user && (
+            <div className="hidden md:flex flex-1 max-w-xl justify-center mx-4">
+              <div className="w-full">
                 <SearchBar />
+              </div>
             </div>
-            )}
-            <div>
-            <div className="flex flex-row items-center mx-auto">
-                {!user ? (
-                    <>
-                <div className="flex items-center lg:order-2">
-                    <Link to="/login" className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">Log in</Link>
+          )}
+
+          {/* Mobile Search Overlay / Active View */}
+          {user && showMobileSearch && (
+            <div className="flex md:hidden flex-1 items-center gap-2 w-full">
+              <div className="w-full">
+                <SearchBar />
+              </div>
+              <button 
+                onClick={() => setShowMobileSearch(false)}
+                className="p-2 text-gray-400 hover:text-white shrink-0"
+              >
+                <FaTimes size={18} />
+              </button>
+            </div>
+          )}
+
+          {/* Right Action Buttons, Search Icon (Mobile), & Avatar */}
+          {!showMobileSearch && (
+            <div className="flex items-center gap-3">
+              {!user ? (
+                <div className="flex items-center gap-2">
+                  <Link to="/login" className="text-gray-800 dark:text-white hover:bg-gray-50 font-medium rounded-lg text-sm px-3 py-2">Log in</Link>
+                  <Link to="/register" className="text-gray-800 dark:text-white hover:bg-gray-50 font-medium rounded-lg text-sm px-3 py-2">Register</Link>
                 </div>
-                <div className="flex items-center lg:order-2">
-                    <Link to="/register" className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">Register</Link>
-                </div>
-                </>
-                ) : (
-                <div className="flex items-center lg:order-2 gap-8">
-                    <div className='text-white text-xl'>
-                    {/* {user && <Button val="Create" func={showCreateModal}/>} */}
-                    {user && <Button func={() => {setIsClose(false)}} extra_class='p-3 rounded-2xl'><FaUpload/></Button>}
-                    </div>
-                    {/* <div className='text-white text-xl'>
-                    {user && <Button func={showNotification} extra_class='p-3 rounded-2xl'><FaRegBell/></Button>}
-                    </div> */}
-                    <div>
+              ) : (
+                <div className="flex items-center gap-3 sm:gap-6">
+                  {/* Mobile Search Trigger Icon */}
+                  {user && (
+                    <button 
+                      onClick={() => setShowMobileSearch(true)} 
+                      className="md:hidden p-2 text-white text-lg rounded-full hover:bg-gray-800"
+                    >
+                      <FaSearch />
+                    </button>
+                  )}
+
+                  <div className='text-white text-xl'>
+                    <Button func={() => {setIsClose(false)}} extra_class='p-2 sm:p-3 rounded-2xl'><FaUpload/></Button>
+                  </div>
+                  
+                  {/* Avatar with shrink-0 to prevent squishing */}
+                  <div className="shrink-0 relative">
                     <Avatar onClick={showAvatarOptions} src={user?.avatar}/>
-                    </div>
+                  </div>
                 </div>
-                )}
+              )}
             </div>
-        </div>     
+          )}     
         </div>
+
+        {/* Avatar Dropdown Menu */}
         {user && menuOpen && (<AvatarMenu ref={menuRef}/>)}
-    </nav>
-    <CreateVideoModal isClose={isClose} setIsClose={setIsClose}/>
-</header>
+      </nav>
+      <CreateVideoModal isClose={isClose} setIsClose={setIsClose}/>
+    </header>
     </>
   )
 }
 
-export default Header
+export default Header;
