@@ -28,12 +28,12 @@ export const useLogout = () => {
         onSuccess: () => {
             queryClient.setQueryData(['currentUser'], null);
             queryClient.clear();
-            navigate("/login", { replace: true });
+            navigate("/", { replace: true });
         },
         onError: (error) => {
             console.error("Logout failed:", error);
             queryClient.clear();
-            navigate("/login", { replace: true });
+            navigate("/", { replace: true });
         }
     });
 };
