@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Input = ({type='text', placeholder='Enter', max, className, Value="", onChange}) => {
+const Input = ({type='text', placeholder='Enter', max, className, Value="", onChange, ...props}) => {
   return (
     <input className={`w-full px-4 py-2 border 
          focus:outline-none 
@@ -10,6 +10,7 @@ const Input = ({type='text', placeholder='Enter', max, className, Value="", onCh
          max={max}
          value={Value}
          onChange={onChange}
+         {...props}
          />
   )
 }

@@ -38,13 +38,13 @@ export const useLogout = () => {
     });
 };
 
-export const useUpdateProfileDetails = (data) => {
+export const useUpdateProfileDetails = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: (data) => updateUserDetails(data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['profile'] })
+            queryClient.invalidateQueries({ queryKey: ['currentUser'] })
         },
         onError: (error) => {
             console.error("Mutation failed:", error);
@@ -58,7 +58,7 @@ export const useUpdateAvatar = () => {
     return useMutation({
         mutationFn: (data) => updateAvatar(data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['avatar'] })
+            queryClient.invalidateQueries({ queryKey: ['currentUser'] })
         },
         onError: (error) => {
             console.error("Mutation failed:", error);
@@ -72,7 +72,7 @@ export const useUpdateCoverImage = () => {
     return useMutation({
         mutationFn: (data) => updateCoverImage(data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['coverImage'] })
+            queryClient.invalidateQueries({ queryKey: ['currentUser'] })
         },
         onError: (error) => {
             console.error("Mutation failed:", error);

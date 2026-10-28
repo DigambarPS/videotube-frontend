@@ -1,9 +1,24 @@
 import {getRequest} from "./axiosInstance";
+import axiosInstance from "./axiosInstance";
 
 const changeUserPassword = (payload) => axiosInstance.post('/users/change-password', payload);
-const updateUserDetails = (payload) => axiosInstance.post('/users/update-details', payload);
-const updateAvatar = (payload) => axiosInstance.post('/users/update-avatar', payload);
-const updateCoverImage = (payload) => axiosInstance.post('/users/update-coverImage', payload);
+
+const updateUserDetails = async (payload) => 
+{
+    const data = await axiosInstance.patch('/users/update-details', payload);
+    return data.data;
+}
+
+const updateAvatar = async (payload) => {
+    const data = await axiosInstance.patch('/users/update-avatar', payload);
+    return data.data;
+}
+
+const updateCoverImage = async (payload) => {
+    const data = await axiosInstance.patch('/users/update-coverImage', payload);
+    return data.data;
+}
+
 const renewAccessToken = (payload) => axiosInstance.post('/users/renew-access-token', payload);
 
 const getCurrentUser = async () => {
