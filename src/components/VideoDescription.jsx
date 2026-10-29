@@ -5,67 +5,95 @@ import {
   FaThumbsUp,
   FaRegThumbsUp,
   FaRegThumbsDown,
+  FaThumbsDown,
   FaShare,
   FaRegBookmark,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { formatViews } from "../utils/formatters";
+import { useToggleSubscribe } from "../hooks/useSubscription";
+import { useToggleVideoLike } from "../hooks/useLike";
 
 const VideoDescription = ({ videoData }) => {
-  const [liked, setLiked] = useState(false);
-  const [isSubscribed, setIsSubscribed] = useState(false);
-  const [disliked, setDisliked] = useState(false);
+  const [isVideoDisliked, setIsVideoDisliked] = useState(false);
   const [saved, setSaved] = useState(false);
+  
+  const [isSubscribed, setIsSubscribed] = useState(
+    videoData?.owner?.isSubscribed ?? false
+  );
+  const { mutate: toggleSubscribe } = useToggleSubscribe(videoData?.owner?._id);
 
-  function toggleVideoLike(e) {
-    setLiked((prev) => !prev);
+  const [isVideoLiked, setIsVideoLiked] = useState(videoData?.isLiked ?? false);
+  const [videoLikeCount, setVideoLikeCount] = useState(
+    videoData?.totalLikes ?? 0,
+  );
+  const { mutate: toggleVidLike } = useToggleVideoLike(videoData?._id);
+
+  function toggleVideoLike() {
+    toggleVidLike();
+    const nextLikedState = !isVideoLiked;
+    setIsVideoLiked(nextLikedState);
+
+    if (nextLikedState) {
+      if (isVideoDisliked) {
+        setIsVideoDisliked(false);
+      }
+      setVideoLikeCount((prev) => prev + 1);
+    } else {
+      setVideoLikeCount((prev) =>
+        Math.ln ? Math.max(0, prev - 1) : Math.max(0, prev - 1),
+      );
+    }
   }
 
   function toggleVideoDisLike() {
-    setDisliked((prev) => !prev);
+    toggleVidLike();
+    const nextDislikedState = !isVideoDisliked;
+    setIsVideoDisliked(nextDislikedState);
+
+    if (nextDislikedState) {
+      if (isVideoLiked) {
+        setIsVideoLiked(false);
+        setVideoLikeCount((prev) => Math.max(0, prev - 1));
+      }
+    }
   }
 
   function toggleVideoSave() {
     setSaved((prev) => !prev);
   }
 
-  function toggleVideoShare() {
-    console.log("toggleVideoShare called");
-  }
+  function toggleVideoShare() {}
 
-  function subscribeOptions(e) {
-    if (!isSubscribed) {
-      setIsSubscribed(true);
-    } else {
-      // handle subscription options
-    }
+  function subscribeOptions() {
+    toggleSubscribe();
+    setIsSubscribed((prev) => !prev);
   }
 
   return (
     <div className="flex flex-col w-full">
       <h2 className="p-1 font-bold text-lg">{videoData?.title}</h2>
-      
+
       {/* Channel info & Action buttons container */}
       <div className="flex flex-col sm:flex-row sm:items-center my-2 justify-between gap-3">
-        
         {/* Channel Details */}
         <div className="flex gap-2 px-1 items-center">
           <Link to={`/Channel/${videoData?.owner?._id}`} className="shrink-0">
             <Avatar size="w-8 h-8" src={videoData?.owner?.avatar} />
           </Link>
           <div className="flex flex-col min-w-0">
-            <div className="font-bold text-sm truncate">{videoData?.owner?.fullName}</div>
+            <div className="font-bold text-sm truncate">
+              {videoData?.owner?.fullName}
+            </div>
             <p className="text-xs text-gray-400">
               {formatViews(videoData?.owner?.subscriberCount || 0)} subscribers
             </p>
           </div>
-          <button onClick={subscribeOptions} className="ml-2">
-            {isSubscribed ? (
-              <Button extra_class="text-xs rounded-xl p-1" val="Subscribed" />
-            ) : (
-              <Button extra_class="text-xs rounded-xl p-2" val="Subscribe" />
-            )}
-          </button>
+          <Button
+            func={subscribeOptions}
+            extra_class="text-xs rounded-xl p-3 ml-2 bg-gray-800"
+            val={isSubscribed ? "Subscribed" : "Subscribe"}
+          />
         </div>
 
         {/* Action Buttons */}
@@ -76,12 +104,12 @@ const VideoDescription = ({ videoData }) => {
               func={toggleVideoLike}
             >
               <div className="flex flex-row gap-2 justify-around items-center">
-                {liked ? <FaThumbsUp /> : <FaRegThumbsUp />}
-                <p>{formatViews(videoData?.totallikes || 0)}</p>
+                {isVideoLiked ? <FaThumbsUp /> : <FaRegThumbsUp />}
+                <p>{formatViews(videoLikeCount || 0)}</p>
               </div>
             </Button>
             <Button
-              val={<FaRegThumbsDown />}
+              val={isVideoDisliked ? <FaThumbsDown /> : <FaRegThumbsDown />}
               extra_class="text-xs px-2 py-2 rounded-r-xl"
               func={toggleVideoDisLike}
             />
@@ -99,7 +127,11 @@ const VideoDescription = ({ videoData }) => {
           <Button
             val={
               <div className="flex flex-row gap-1 items-center">
-                {saved ? <FaRegBookmark className="text-blue-500" /> : <FaRegBookmark />}
+                {saved ? (
+                  <FaRegBookmark className="text-blue-500" />
+                ) : (
+                  <FaRegBookmark />
+                )}
                 <p className="text-xs">Save</p>
               </div>
             }

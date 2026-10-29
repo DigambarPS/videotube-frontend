@@ -20,7 +20,7 @@ const VideoPlayerPage = () => {
             <div className='w-full'>
               {isLoading && <VideoPlayerSkeleton/>}
               {data?.videoFile && <VideoPlayer src={data.videoFile}/>}
-              <VideoDescription videoData={data}/>
+              {data && <VideoDescription videoData={data}/>}
             </div>
             <CommentLayout videoId={videoId}/>
         </div>
