@@ -2,7 +2,7 @@ import React from 'react'
 import { Navigate, Outlet, redirect } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 
-const PublicOnlyRoute = ({redirectTo = "/login"}) => {
+const PublicOnlyRoute = ({redirectTo = "/"}) => {
   const {user, isLoading} = useAuth();
 
   if (isLoading) {
