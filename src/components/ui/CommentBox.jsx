@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PaperAirplaneIcon } from "@heroicons/react/24/solid"; // Heroicons
+import { PaperAirplaneIcon , ArrowPathIcon} from "@heroicons/react/24/solid";
 import Avatar from "./Avatar";
 import { usePostComment } from "../../hooks/useComment";
 import { useAuth } from "../../context/authContext";
@@ -37,9 +37,10 @@ export default function CommentBox({ size = "w-12", id }) {
       />
       <button
         onClick={handleSend}
+        disabled={isLoading}
         className="ml-2 p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
       >
-        <PaperAirplaneIcon className="h-3 w-3 hover:cursor-pointer" />
+        {isLoading ? <ArrowPathIcon className="h-3 w-3 hover:cursor-disabled animate-spin"/>  : <PaperAirplaneIcon className="h-3 w-3 hover:cursor-pointer" />}
       </button>
     </div>
   );
