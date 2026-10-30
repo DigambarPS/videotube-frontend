@@ -5,7 +5,7 @@ import { useAuth } from "../context/authContext";
 import Avatar from "../components/ui/Avatar";
 import { useChannelVideos } from "../hooks/useVideo";
 import VideoCard from "../components/VideoCard";
-import ChannelSkeleton from "../components/shimmerUI/ChannelSkeleton"; // 1. Import your new skeleton
+import ChannelSkeleton from "../components/shimmerUI/ChannelSkeleton";
 import { formatTimeSinceUpload, formatViews } from "../utils/formatters";
 import { useUserChannelProfile } from "../hooks/useUser";
 import { useToggleSubscribe } from "../hooks/useSubscription";
@@ -20,7 +20,7 @@ const Channel = () => {
   const tabs = ["Home", "Videos", "About"];
 
   // For channel videos
-  const { data, isLoading: isVideosLoading, isError } = useChannelVideos(1, 15, channelId);
+  const { data, isLoading: isVideosLoading, isError } = useChannelVideos(1, 15, channelId, 'desc');
   const Videos = data?.pages.flatMap((page) => page.docs) || [];
 
   // For channel data
@@ -154,8 +154,8 @@ const Channel = () => {
                       thumbnailSrc={video.thumbnail}
                       videoTitle={video.title}
                       channelName={video.owner[0]?.fullName}
-                      views={formatViews(video.views)}
-                      timeFromPosting={formatTimeSinceUpload(video.createdAt)}
+                      views={video.views}
+                      timeFromPosting={video.createdAt}
                       videoId={video._id}
                       key={video._id}
                     />

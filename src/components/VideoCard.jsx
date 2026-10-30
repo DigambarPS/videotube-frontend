@@ -1,6 +1,7 @@
 import React from 'react'
 import Avatar from './ui/Avatar'
 import { Link } from 'react-router-dom';
+import { formatViews, formatTimeSinceUpload } from "../utils/formatters.js";
 
 const VideoCard = ({
   avatarSrc='https://res.cloudinary.com/dajxuyxdx/image/upload/v1783798683/fyccme4ouyjwbujwobkr.png',
@@ -29,8 +30,8 @@ const VideoCard = ({
           <p className="text-sm md:text-base font-semibold truncate">{videoTitle}</p>
           <p className="text-xs md:text-sm text-gray-400 truncate">{channelName}</p>
           <div className="flex gap-2 text-xs md:text-sm text-gray-500">
-            <span>{views} views</span>
-            <span>{timeFromPosting}</span>
+            <span>{formatViews(views)} views</span>
+            <span>{formatTimeSinceUpload(timeFromPosting)}</span>
           </div>
         </div>
       </div>

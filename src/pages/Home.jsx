@@ -3,7 +3,6 @@ import VideoCard from "../components/VideoCard.jsx";
 import SideBar from "../components/sideBar.jsx";
 import { useVideos } from "../hooks/useVideo.js";
 import { Link, useSearchParams } from "react-router-dom";
-import { formatViews, formatTimeSinceUpload } from "../utils/formatters.js";
 import VideoCardSkeleton from "../components/shimmerUI/VideoCardSkeleton.jsx";
 
 const Home = () => {
@@ -44,8 +43,8 @@ const Home = () => {
                   thumbnailSrc={video?.thumbnail}
                   videoTitle={video.title}
                   channelName={video.owner[0]?.fullName}
-                  views={formatViews(video.views)}
-                  timeFromPosting={formatTimeSinceUpload(video.createdAt)}
+                  views={video.views}
+                  timeFromPosting={video.createdAt}
                   videoId={video._id}
                   key={video._id}
                 />
