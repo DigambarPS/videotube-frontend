@@ -17,6 +17,11 @@ export const personalInformationSchema = z.object({
     .min(3, "Full name cannot be less than 3 characters")
     .max(50, "Full name cannot be more than 50 characters")
     .optional(),
+
+    about: z
+    .string()
+    .max(500, "About cannot be more than 500 characters")
+    .optional()
 });
 
 export const avatarSchema = z.object({
