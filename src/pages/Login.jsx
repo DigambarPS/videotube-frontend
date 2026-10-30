@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { loginUserApi } from "../api/authApi.js";
 import { useNavigate } from "react-router-dom";
 import ErrorUI from "../components/ui/ErrorUI.jsx";
+import Button from "../components/ui/Button.jsx";
 
 export default function Login() {
   const [emailOrUser, setEmailOrUser] = useState("");
@@ -10,7 +11,7 @@ export default function Login() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const loginMutation = useMutation({
+  const {mutate:loginMutation, isPending, isError} = useMutation({
     mutationFn: (payload) => loginUserApi(payload),
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["currentUser"] });
@@ -22,7 +23,7 @@ export default function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    loginMutation.mutate({ email:emailOrUser, username:emailOrUser, password });
+    loginMutation({ email:emailOrUser, username:emailOrUser, password });
   };
 
   return (
@@ -32,10 +33,10 @@ export default function Login() {
           Login
         </h2>
 
-        {loginMutation.isError && (
+        {isError && (
           <ErrorUI
-            message={loginMutation.error.message || "Login failed"}
-            onClose={() => loginMutation.reset()} // reset clears error state
+            message={"Something went wrong, Login failed"}
+            onClose={() => loginMutation.reset()}
           />
         )}
 
@@ -62,13 +63,13 @@ export default function Login() {
                        dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
           />
 
-          <button
+          <Button
             type="submit"
-            className="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg 
+            disabled={isPending}
+            extra_class="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg 
                        hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          >
-            Login
-          </button>
+            val={isPending ? 'Logging in...' : 'Login'}
+          />
         </form>
       </div>
     </div>
