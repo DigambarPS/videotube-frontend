@@ -13,7 +13,7 @@ const Subscriptions = () => {
   const videos = data?.pages.flatMap((page) => page.docs) || [];
   
   return (
-    <div className="min-h-screen bg-black text-white p-4 md:p-6">
+    <div className="min-h-screen bg-gray-900 text-white p-4 md:p-6">
       {isLoading && <SubscriptionsSkeleton/>}
       {/* Top Header & Filter Button */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
