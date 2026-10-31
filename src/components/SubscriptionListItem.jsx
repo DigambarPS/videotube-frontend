@@ -18,7 +18,7 @@ const SubscriptionListItem = ({ data }) => {
             {data?.fullName}
           </h3>
           
-          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 flex-wrap">
             <span>@{data?.username}</span>
             <span>•</span>
             <span>{formatViews(data?.subscriberCount) || "0"} subscribers</span>
