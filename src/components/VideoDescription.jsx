@@ -14,12 +14,12 @@ import { formatViews } from "../utils/formatters";
 import { useToggleSubscribe } from "../hooks/useSubscription";
 import { useToggleVideoLike } from "../hooks/useLike";
 
-const VideoDescription = ({ videoData }) => {
+const VideoDescription = ({ videoData, user }) => {
   const [isVideoDisliked, setIsVideoDisliked] = useState(false);
   const [saved, setSaved] = useState(false);
-  
+
   const [isSubscribed, setIsSubscribed] = useState(
-    videoData?.owner?.isSubscribed ?? false
+    videoData?.owner?.isSubscribed ?? false,
   );
   const { mutate: toggleSubscribe } = useToggleSubscribe(videoData?.owner?._id);
 
@@ -63,7 +63,32 @@ const VideoDescription = ({ videoData }) => {
     setSaved((prev) => !prev);
   }
 
-  function toggleVideoShare() {}
+  async function toggleVideoShare() {
+    const shareData = {
+      title: document.title,
+      text: "Check out this video on VidRepublic!",
+      url: window.location.href, // Gets the current page URL
+    };
+
+    // Check if the browser supports the native Web Share API
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        if (err.name !== "AbortError") {
+          console.error("Error sharing:", err);
+        }
+      }
+    } else {
+      // Fallback: Copy to clipboard if Web Share API isn't available
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        alert("Link copied to clipboard!");
+      } catch (err) {
+        console.error("Failed to copy link: ", err);
+      }
+    }
+  }
 
   function subscribeOptions() {
     toggleSubscribe();
@@ -89,11 +114,13 @@ const VideoDescription = ({ videoData }) => {
               {formatViews(videoData?.owner?.subscriberCount || 0)} subscribers
             </p>
           </div>
-          <Button
-            func={subscribeOptions}
-            extra_class="text-xs rounded-xl p-3 ml-2 bg-gray-800"
-            val={isSubscribed ? "Subscribed" : "Subscribe"}
-          />
+          {videoData && user && videoData?.owner?._id !== user?._id && (
+            <Button
+              func={subscribeOptions}
+              extra_class="text-xs rounded-xl p-3 ml-2 bg-gray-800"
+              val={isSubscribed ? "Subscribed" : "Subscribe"}
+            />
+          )}
         </div>
 
         {/* Action Buttons */}

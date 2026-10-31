@@ -94,7 +94,7 @@ const Channel = () => {
 
           {/* Subscribe Action Button */}
           <div className="flex items-center space-x-2 self-stretch sm:self-auto">
-            {channelData?._id !== user?._id && (
+            {channelData && user && channelData?._id !== user?._id && (
               <Button
                 func={() => handleSubscribeClick()}
                 extra_class={`flex-1 sm:flex-none px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 flex items-center justify-center space-x-2 ${
