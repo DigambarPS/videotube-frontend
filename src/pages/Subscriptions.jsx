@@ -5,6 +5,7 @@ import { useAuth } from '../context/authContext'
 import { useSubscribedChannelVideos, useVideo } from '../hooks/useVideo'
 import { getAllVideos } from '../api/videoApi'
 import SubscriptionsSkeleton from '../components/shimmerUI/SubscriptionsSkeleton'
+import Button from '../components/ui/Button'
 
 const Subscriptions = () => {
   const {user} = useAuth();
@@ -19,9 +20,9 @@ const Subscriptions = () => {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <h1 className="text-xl md:text-2xl font-bold">Latest</h1>
         
-        {/* <Link to={`/subscriptionList/${user?._id}`}><button className="bg-zinc-800 hover:bg-zinc-700 text-white text-sm font-medium px-4 py-2 rounded-full transition-colors duration-200">
-          All subscriptions
-        </button></Link> */}
+        <Link to={`/subscriptionList/${user?._id}`}>
+        <Button val='All subscriptions' extra_class="bg-black hover:bg-gray-700 text-white text-sm font-medium px-4 py-2 rounded-full transition-colors duration-200"/>
+        </Link>
       </div>
 
       {/* Video Grid */}

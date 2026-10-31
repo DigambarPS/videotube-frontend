@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toggleChannelSubscription } from "../api/subscriptionApi";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getSubscribedChannels, toggleChannelSubscription } from "../api/subscriptionApi";
 
 export const useToggleSubscribe = (channelId) => {
   const queryClient = useQueryClient();
@@ -11,3 +11,11 @@ export const useToggleSubscribe = (channelId) => {
     },
   });
 };
+
+export const useSubscription = (channelId) => {
+    return useQuery({
+        queryKey:['subscriptions', channelId],
+        queryFn:() => getSubscribedChannels(channelId),
+        enabled: !!channelId
+    })
+}
