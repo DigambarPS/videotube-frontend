@@ -43,7 +43,7 @@ const SideBar = () => {
         <SidebarButton 
           label="Subscriptions" 
           icon={MdSubscriptions} 
-          toPage={user?._id ? `/Home` : "/login"} 
+          toPage={`/subscriptions/${user?._id}`} 
         />
 
         <SidebarButton label="Your Channel" icon={FaUser} toPage={`/Channel/${user._id}`} />
