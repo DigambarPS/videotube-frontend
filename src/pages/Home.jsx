@@ -41,10 +41,10 @@ const Home = () => {
                 <VideoCard
                   avatarSrc={video?.owner[0].avatar}
                   thumbnailSrc={video?.thumbnail}
-                  videoTitle={video.title}
-                  channelName={video.owner[0]?.fullName}
-                  views={video.views}
-                  timeFromPosting={video.createdAt}
+                  videoTitle={video?.title}
+                  channelName={video?.owner[0]?.fullName}
+                  views={video?.views}
+                  timeFromPosting={video?.createdAt}
                   videoId={video._id}
                   key={video._id}
                 />

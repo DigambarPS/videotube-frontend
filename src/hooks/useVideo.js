@@ -34,6 +34,17 @@ export const useChannelVideos = (page,limit,userId,sortType) => {
     })
 }
 
+export const useSubscribedChannelVideos = (page,limit,userId,sortType,query,type) => {
+    return useInfiniteQuery({
+        queryKey: ["subscriptionVideos", userId],
+        queryFn: () => getAllVideos(page,limit,userId,sortType,query,type),
+        initialPageParam:1,
+        getNextPageParam: (lastPage) => {
+            return lastPage.hasNextPage ? lastPage.nextPage : undefined
+        }
+    })
+}
+
 export const useUploadVideo = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();

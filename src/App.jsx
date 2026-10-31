@@ -18,6 +18,7 @@ import ProtectedRoute from './components/ProtectedRoute.jsx'
 import PublicOnlyRoute from "./components/PublicOnlyRoute.jsx";
 import SideBar from "./components/sideBar.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
+import SubscriptionList from "./pages/SubscriptionList.jsx";
 const VideoPlayerPage = lazy(() => import("./pages/VideoPlayerPage.jsx"));
 const Profile = lazy(() => import("./pages/Profile.jsx"));
 const Channel = lazy(() => import("./pages/Channel.jsx"));
@@ -71,7 +72,8 @@ const router = createBrowserRouter([
             element:<HomeLayout/>,
             children:[
               { path: "/Home", element: <Home /> },
-              { path: "/Subscriptions/:userid", element: <Subscriptions/>},
+              { path: "/subscriptions/:userid", element: <Subscriptions/>},
+              { path: "/subscriptionList/:userid", element: <SubscriptionList/>},
             ]
           }
         ],

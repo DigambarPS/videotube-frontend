@@ -5,10 +5,11 @@ const getAllVideos = async (
   page = 1,
   limit = 15,
   userId = null,
-  sort = null,
+  sortType = null,
   query,
+  type=null
 ) => {
-  return getRequest("/videos/", { page, limit, userId, sort, query });
+  return getRequest("/videos/", { page, limit, userId, sortType, query, type });
 };
 
 const getVideoById = async (videoId) => {
