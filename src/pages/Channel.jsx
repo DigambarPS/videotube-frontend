@@ -11,6 +11,7 @@ import { useUserChannelProfile } from "../hooks/useUser";
 import { useToggleSubscribe } from "../hooks/useSubscription";
 import { useParams } from "react-router-dom";
 import Button from "../components/ui/Button.jsx";
+import SubscriptionButton from "../components/SubscriptionButton.jsx";
 
 const Channel = () => {
   const [activeTab, setActiveTab] = useState("Home");
@@ -30,12 +31,12 @@ const Channel = () => {
     isError: isChannelError,
   } = useUserChannelProfile(channelId);
 
-  const isSubscribed = channelData?.isSubscribed ?? false;
-  const { mutate: toggleSubscribe } = useToggleSubscribe(channelData?._id);
+  // const isSubscribed = channelData?.isSubscribed ?? false;
+  // const { mutate: toggleSubscribe } = useToggleSubscribe(channelData?._id);
 
-  const handleSubscribeClick = () => {
-    toggleSubscribe();
-  };
+  // const handleSubscribeClick = () => {
+  //   toggleSubscribe();
+  // };
 
   // 2. Return the separate skeleton if channel data is loading
   if (isChannelLoading) {
@@ -93,7 +94,7 @@ const Channel = () => {
           </div>
 
           {/* Subscribe Action Button */}
-          <div className="flex items-center space-x-2 self-stretch sm:self-auto">
+          {/* <div className="flex items-center space-x-2 self-stretch sm:self-auto">
             {channelData && user && channelData?._id !== user?._id && (
               <Button
                 func={() => handleSubscribeClick()}
@@ -113,7 +114,8 @@ const Channel = () => {
                 )}
               </Button>
             )}
-          </div>
+          </div> */}
+          {channelData && <SubscriptionButton data={channelData} user={user}/>}
         </div>
 
         {/* 3. Navigation Tabs */}

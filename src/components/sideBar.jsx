@@ -47,8 +47,8 @@ const SideBar = () => {
         />
 
         <SidebarButton label="Your Channel" icon={FaUser} toPage={`/Channel/${user._id}`} />
-        <SidebarButton label="Playlists" icon={FaList} toPage={`/Home`} />
-        <SidebarButton label="Watch History" icon={FaClock} toPage={`/Home`} />
+        {/* <SidebarButton label="Playlists" icon={FaList} toPage={`/Home`} /> */}
+        <SidebarButton label="Watch History" icon={FaClock} toPage={`/WatchHistory/${user._id}`} />
       </div>
     </>
   );

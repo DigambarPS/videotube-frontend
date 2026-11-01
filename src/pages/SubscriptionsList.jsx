@@ -1,9 +1,9 @@
-import React from 'react'
-import SubscriptionsListItem from '../components/SubscriptionListItem'
-import SubscriptionsListSkeleton from '../components/shimmerUI/SubscriptionsListSkeleton'
-import { useAuth } from '../context/authContext'
-import { useSubscription } from '../hooks/useSubscription'
-import { useParams } from 'react-router-dom'
+import React from "react";
+import SubscriptionsListItem from "../components/SubscriptionListItem";
+import SubscriptionsListSkeleton from "../components/shimmerUI/SubscriptionsListSkeleton";
+import { useAuth } from "../context/authContext";
+import { useSubscription } from "../hooks/useSubscription";
+import { useParams } from "react-router-dom";
 
 const SubscriptionsList = () => {
   const { user } = useAuth();
@@ -29,18 +29,23 @@ const SubscriptionsList = () => {
       )}
 
       {/* Subscriptions Grid / List */}
-      {!isError && (
-        <div className="grid grid-cols-1 gap-4">
-          {list?.map((channel) => (
-            <SubscriptionsListItem
-              key={channel._id}
-              data={channel}
-            />
-          ))}
-        </div>
-      )}
+      {!isError &&
+        data &&
+        (data?.length !== 0 ? (
+          <div className="grid grid-cols-1 gap-4">
+            {list?.map((channel) => (
+              <SubscriptionsListItem key={channel._id} data={channel} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12 text-gray-400">
+            <p>
+              No subscriptions available. Please subscribe to some channels.
+            </p>
+          </div>
+        ))}
     </div>
-  )
-}
+  );
+};
 
-export default SubscriptionsList
+export default SubscriptionsList;

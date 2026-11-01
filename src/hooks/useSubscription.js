@@ -8,6 +8,9 @@ export const useToggleSubscribe = (channelId) => {
     mutationFn: () => toggleChannelSubscription(channelId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["userChannelProfile"] });
+      queryClient.invalidateQueries({ queryKey: ["video"] });
+      queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
+      queryClient.invalidateQueries({ queryKey: ["subscriptionVideos"] });
     },
   });
 };

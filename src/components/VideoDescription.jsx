@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "./ui/Avatar";
 import Button from "./ui/Button";
 import {
@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { formatViews } from "../utils/formatters";
 import { useToggleSubscribe } from "../hooks/useSubscription";
 import { useToggleVideoLike } from "../hooks/useLike";
+import SubscriptionButton from "./SubscriptionButton";
 
 const VideoDescription = ({ videoData, user }) => {
   const [isVideoDisliked, setIsVideoDisliked] = useState(false);
@@ -90,11 +91,6 @@ const VideoDescription = ({ videoData, user }) => {
     }
   }
 
-  function subscribeOptions() {
-    toggleSubscribe();
-    setIsSubscribed((prev) => !prev);
-  }
-
   return (
     <div className="flex flex-col w-full">
       <h2 className="p-1 font-bold text-lg">{videoData?.title}</h2>
@@ -114,13 +110,14 @@ const VideoDescription = ({ videoData, user }) => {
               {formatViews(videoData?.owner?.subscriberCount || 0)} subscribers
             </p>
           </div>
-          {videoData && user && videoData?.owner?._id !== user?._id && (
+          {/* {videoData && user && videoData?.owner?._id !== user?._id && (
             <Button
               func={subscribeOptions}
               extra_class="text-xs rounded-xl p-3 ml-2 bg-gray-800"
               val={isSubscribed ? "Subscribed" : "Subscribe"}
             />
-          )}
+          )} */}
+          {videoData && user && <SubscriptionButton data={videoData?.owner} user={user}/>}
         </div>
 
         {/* Action Buttons */}

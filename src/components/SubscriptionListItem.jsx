@@ -3,15 +3,18 @@ import Avatar from './ui/Avatar'
 import Button from './ui/Button'
 import { formatViews } from '../utils/formatters'
 import { Link } from 'react-router-dom'
+import SubscriptionButton from './SubscriptionButton'
+import { useAuth } from '../context/authContext'
 
 const SubscriptionListItem = ({ data }) => {
-    console.log(data);
+  const { user } = useAuth();
   return (
-    <Link to={`/Channel/${data?._id}`}>
+    
     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-gray-100 dark:bg-black rounded-xl border border-gray-200 dark:border-gray-800 transition-colors">
       {/* Channel Avatar & Details */}
+      <Link to={`/Channel/${data?._id}`}>
       <div className="flex items-center gap-4">
-        <Avatar src={data?.avatar} size='w-25 h-25' />
+        <Avatar src={data?.avatar} size='w-25 h-25 shrink-0' />
         
         <div className="flex flex-col gap-1">
           <h3 className="text-gray-900 dark:text-white font-semibold text-base">
@@ -31,7 +34,7 @@ const SubscriptionListItem = ({ data }) => {
           )}
         </div>
       </div>
-
+      </Link>
       {/* Subscribe / Subscribed Button */}
       {/* <Button 
         val={data?.isSubscribed ? "Subscribed" : "Subscribe"} 
@@ -41,8 +44,9 @@ const SubscriptionListItem = ({ data }) => {
             : "bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100"
         }`}
       /> */}
+      {data && user && <SubscriptionButton data={data} user={user}/>}
     </div>
-    </Link>
+    
   )
 }
 

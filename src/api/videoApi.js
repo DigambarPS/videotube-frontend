@@ -1,5 +1,4 @@
-import { getRequest } from "./axiosInstance";
-import axiosInstance from "./axiosInstance";
+import axiosInstance, { getRequest } from "./axiosInstance.js";
 
 const getAllVideos = async (
   page = 1,
@@ -23,7 +22,7 @@ const deleteVideo = async (videoId) => {
 
 const postVideo = async (formData) => {
   const { data } = await axiosInstance.post("/videos/", formData);
-  console.log(data);
+  // console.log(data);
   return data.data;
 };
 

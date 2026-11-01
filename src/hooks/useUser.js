@@ -1,5 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getCurrentUser, getUserChannelProfile, updateAvatar, updateCoverImage, updateUserDetails } from "../api/userApi";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getCurrentUser, getHistory, getUserChannelProfile, updateAvatar, updateCoverImage, updateUserDetails } from "../api/userApi";
 import { logoutUserApi } from "../api/authApi";
 import { useNavigate } from "react-router-dom";
 
@@ -78,4 +78,15 @@ export const useUpdateCoverImage = () => {
             console.error("Mutation failed:", error);
         }
     });
+}
+
+export const useUserWatchHistory = (page,limit,userId,sortType,query) => {
+    return useInfiniteQuery({
+        queryKey: ["watchHistory", userId],
+        queryFn: () => getHistory(page,limit,userId,sortType,query),
+        initialPageParam:1,
+        getNextPageParam: (lastPage) => {
+            return lastPage.hasNextPage ? lastPage.nextPage : undefined
+        }
+    })
 }

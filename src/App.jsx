@@ -18,12 +18,13 @@ import ProtectedRoute from './components/ProtectedRoute.jsx'
 import PublicOnlyRoute from "./components/PublicOnlyRoute.jsx";
 import SideBar from "./components/sideBar.jsx";
 import LandingPage from "./pages/LandingPage.jsx";
-import SubscriptionsList from "./pages/SubscriptionsList.jsx";
 const VideoPlayerPage = lazy(() => import("./pages/VideoPlayerPage.jsx"));
 const Profile = lazy(() => import("./pages/Profile.jsx"));
 const Channel = lazy(() => import("./pages/Channel.jsx"));
 const Settings = lazy(() => import("./pages/Settings.jsx"));
 const Subscriptions = lazy(() => import("./pages/Subscriptions.jsx"));
+const SubscriptionsList = lazy(() => import("./pages/SubscriptionsList.jsx"));
+const WatchHistory = lazy(() => import("./pages/WatchHistory.jsx"));
 
 function RootLayout() {
   return (
@@ -74,6 +75,7 @@ const router = createBrowserRouter([
               { path: "/Home", element: <Home /> },
               { path: "/subscriptions/:channelId", element: <Subscriptions/>},
               { path: "/subscriptionList/:channelId", element: <SubscriptionsList/>},
+              { path: "/WatchHistory/:userId", element: <WatchHistory/>},
             ]
           }
         ],

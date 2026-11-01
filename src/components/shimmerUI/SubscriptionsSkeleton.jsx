@@ -2,7 +2,7 @@ import React from 'react'
 
 const SubscriptionsSkeleton = () => {
   return (
-    <div className="min-h-screen bg-black text-white p-4 md:p-6">
+    <div className="min-h-screen text-white p-4 md:p-6">
       {/* Top Header & Filter Button Shimmer */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div className="h-7 w-24 bg-zinc-800 rounded animate-pulse" />
