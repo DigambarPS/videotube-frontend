@@ -11,7 +11,7 @@ export default function Login() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const {mutate:loginMutation, isPending, isError} = useMutation({
+  const {mutate:loginMutation, isPending, isError , reset} = useMutation({
     mutationFn: (payload) => loginUserApi(payload),
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["currentUser"] });
@@ -23,7 +23,7 @@ export default function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    loginMutation({ email:emailOrUser, username:emailOrUser, password });
+    loginMutation({ email:emailOrUser, username:emailOrUser, password});
   };
 
   return (
@@ -36,7 +36,7 @@ export default function Login() {
         {isError && (
           <ErrorUI
             message={"Something went wrong, Login failed"}
-            onClose={() => loginMutation.reset()}
+            onClose={() => reset()}
           />
         )}
 
