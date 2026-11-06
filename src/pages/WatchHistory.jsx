@@ -32,10 +32,10 @@ const WatchHistory = () => {
             const video = obj.videoData[0];
             return (
             <VideoCard
-              avatarSrc={video?.owner[0]?.avatar}
+              avatarSrc={video?.owner?.avatar}
               thumbnailSrc={video?.thumbnail}
               videoTitle={video?.title}
-              channelName={video?.owner[0]?.fullName}
+              channelName={video?.owner?.fullName}
               views={video?.views}
               timeFromPosting={video?.createdAt}
               videoId={video._id}
