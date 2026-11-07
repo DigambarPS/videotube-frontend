@@ -5,7 +5,7 @@ const Avatar = ({ src="https://res.cloudinary.com/dajxuyxdx/image/upload/v178379
     <img
       src={src}
       alt={alt}
-      className={`${size} rounded-full border-2 border-gray-300 dark:border-gray-600 object-cover`}
+      className={`${size} rounded-full border-2 border-gray-300 dark:border-gray-600 object-cover shrink-0`}
       onClick={onClick}
     />
   )
