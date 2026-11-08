@@ -4,13 +4,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
-export const useVideos = (page,limit,userId,sort,query) => {
+export const useVideos = (query) => {
     return useInfiniteQuery({
         queryKey: ["videos", query],
-        queryFn: () => getAllVideos(page,limit,userId,sort,query),
+        queryFn: ({pageParam=1}) => getAllVideos(pageParam, 10, null, null, query, null),
         initialPageParam:1,
         getNextPageParam: (lastPage) => {
-            return lastPage.hasNextPage ? lastPage.nextPage : undefined
+           return lastPage.hasNextPage ? lastPage.nextPage : undefined;
         }
     })
 }

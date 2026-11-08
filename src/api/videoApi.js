@@ -2,7 +2,7 @@ import axiosInstance, { getRequest } from "./axiosInstance.js";
 
 const getAllVideos = async (
   page = 1,
-  limit = 15,
+  limit = 2,
   userId = null,
   sortType = null,
   query,
