@@ -38,12 +38,12 @@ const Home = () => {
     };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
   return (
-    <div className="flex flex-col md:flex-row w-full min-h-screen bg-gray-900 text-white">
+    <div className="flex flex-col md:flex-row w-full h-screen bg-gray-900 text-white overflow-hidden">
 
 
       
       {/* Video Grid */}
-      <div className="flex-1 p-4">
+      <div className="flex-1 p-4 overflow-y-auto">
       {isLoading ? (
         // Show a grid of skeletons while loading
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
