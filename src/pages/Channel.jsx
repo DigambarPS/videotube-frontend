@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FiBell } from "react-icons/fi";
 import { HiCheckBadge } from "react-icons/hi2";
 import { useAuth } from "../context/authContext";
@@ -21,8 +21,40 @@ const Channel = () => {
   const tabs = ["Home", "Videos", "About"];
 
   // For channel videos
-  const { data, isLoading: isVideosLoading, isError } = useChannelVideos(1, 15, channelId, 'desc');
+  const {
+    data,
+    isLoading: isVideosLoading,
+    isError,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useChannelVideos(1, 15, channelId, "desc");
   const Videos = data?.pages.flatMap((page) => page.docs) || [];
+
+  const observerRef = useRef(null);
+
+  useEffect(() => {
+    const currentObserver = observerRef.current;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.5 },
+    );
+
+    if (currentObserver) {
+      observer.observe(currentObserver);
+    }
+
+    return () => {
+      if (currentObserver) {
+        observer.unobserve(currentObserver);
+      }
+    };
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   // For channel data
   const {
@@ -46,7 +78,9 @@ const Channel = () => {
   if (isChannelError || !channelData) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-black text-white">
-        <p className="text-lg font-medium text-red-500">Failed to load channel profile.</p>
+        <p className="text-lg font-medium text-red-500">
+          Failed to load channel profile.
+        </p>
       </div>
     );
   }
@@ -56,7 +90,11 @@ const Channel = () => {
       {/* 1. Channel Banner */}
       <div className="w-full h-32 md:h-56 relative overflow-hidden bg-gray-800">
         {channelData?.coverImage ? (
-          <img src={channelData.coverImage} alt="cover banner" className="w-full h-full object-cover"/>
+          <img
+            src={channelData.coverImage}
+            alt="cover banner"
+            className="w-full h-full object-cover"
+          />
         ) : (
           <div className="absolute inset-0 bg-black/10 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600"></div>
         )}
@@ -93,29 +131,7 @@ const Channel = () => {
             </div>
           </div>
 
-          {/* Subscribe Action Button */}
-          {/* <div className="flex items-center space-x-2 self-stretch sm:self-auto">
-            {channelData && user && channelData?._id !== user?._id && (
-              <Button
-                func={() => handleSubscribeClick()}
-                extra_class={`flex-1 sm:flex-none px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 flex items-center justify-center space-x-2 ${
-                  isSubscribed
-                    ? "bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-700"
-                    : "bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200"
-                }`}
-              >
-                {isSubscribed ? (
-                  <>
-                    <FiBell className="w-4 h-4" />
-                    <span>Subscribed</span>
-                  </>
-                ) : (
-                  <span>Subscribe</span>
-                )}
-              </Button>
-            )}
-          </div> */}
-          {channelData && <SubscriptionButton data={channelData} user={user}/>}
+          {channelData && <SubscriptionButton data={channelData} user={user} />}
         </div>
 
         {/* 3. Navigation Tabs */}
@@ -145,23 +161,41 @@ const Channel = () => {
               {isVideosLoading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {Array.from({ length: 4 }).map((_, i) => (
-                    <div key={i} className="h-48 bg-gray-200 dark:bg-gray-800 rounded-xl animate-pulse"></div>
+                    <div
+                      key={i}
+                      className="h-48 bg-gray-200 dark:bg-gray-800 rounded-xl animate-pulse"
+                    ></div>
                   ))}
                 </div>
               ) : Videos.length !== 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {Videos.map((video) => (
-                    <VideoCard
-                      avatarSrc={video.owner[0]?.avatar}
-                      thumbnailSrc={video.thumbnail}
-                      videoTitle={video.title}
-                      channelName={video.owner[0]?.fullName}
-                      views={video.views}
-                      timeFromPosting={video.createdAt}
-                      videoId={video._id}
-                      key={video._id}
-                    />
-                  ))}
+                  {Videos.map((video, index) => {
+                    const isLastElement = index === Videos.length - 1;
+                    return (
+                      <>
+                        <div
+                          ref={isLastElement ? observerRef : null}
+                          key={video._id}
+                        >
+                          <VideoCard
+                            avatarSrc={video.owner[0]?.avatar}
+                            thumbnailSrc={video.thumbnail}
+                            videoTitle={video.title}
+                            channelName={video.owner[0]?.fullName}
+                            views={video.views}
+                            timeFromPosting={video.createdAt}
+                            videoId={video._id}
+                          />
+                        </div>
+
+                        {isFetchingNextPage && (
+                          <div className="text-center py-6 text-gray-400">
+                            Loading more videos...
+                          </div>
+                        )}
+                      </>
+                    );
+                  })}
                 </div>
               ) : (
                 <div className="py-12 text-center text-gray-500 dark:text-gray-400 text-base font-medium">
@@ -172,13 +206,17 @@ const Channel = () => {
           ) : activeTab === "About" ? (
             <div className="py-6 text-gray-700 dark:text-gray-300">
               <h3 className="text-md font-semibold mb-2">About this channel</h3>
-              <p className="text-sm whitespace-pre-wrap">{channelData?.about || "No description provided."}</p>
+              <p className="text-sm whitespace-pre-wrap">
+                {channelData?.about || "No description provided."}
+              </p>
             </div>
           ) : (
             <div className="py-12 text-center text-gray-500">
               <p className="text-base font-medium">
                 No content in{" "}
-                <span className="font-semibold text-gray-700 dark:text-gray-300">{activeTab}</span>{" "}
+                <span className="font-semibold text-gray-700 dark:text-gray-300">
+                  {activeTab}
+                </span>{" "}
                 tab yet.
               </p>
             </div>

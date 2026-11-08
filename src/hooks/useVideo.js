@@ -26,7 +26,7 @@ export const useVideo = (videoId) => {
 export const useChannelVideos = (page,limit,userId,sortType) => {
     return useInfiniteQuery({
         queryKey: ["channelVideos", userId],
-        queryFn: () => getAllVideos(page,limit,userId,sortType),
+        queryFn: ({pageParam=1}) => getAllVideos(pageParam,10,userId,sortType),
         initialPageParam:1,
         getNextPageParam: (lastPage) => {
             return lastPage.hasNextPage ? lastPage.nextPage : undefined
